@@ -87,8 +87,9 @@ function drop(ev) {
                         <div class="card blue-grey darken-1">
                           <div class="card-content white-text">
                             <span class="card-title">Response</span>
-                            <p><div id="php_response"></div></p>  </div>
-                            <div id="response"> </div>
+                            <p><div id="php_response"></div></p>
+                            <div id="response"> </div></div>
+
                           <div class="card-action">
                             <a href="http://127.0.0.1/cvapi/front_end">This is a link</a>
                           </div>
@@ -161,25 +162,28 @@ function localhost_con() {
    });
 }
 $('#upload').on('click', function() {
+  console.log("submit clicked");
     var file_data = $('#fileToUpload').prop('files')[0];
     file_loc = file_data;
     var form_data = new FormData();
     form_data.append('file', file_data);
-
+    console.log("Pre-Ajax");
     $.ajax({
                 url: '_upload.php', // point to server-side PHP script
-                dataType: 'text',  // what to expect back from the PHP script, if anything
+              //  dataType: 'text',  // what to expect back from the PHP script, if anything
                 cache: false,
                 contentType: false,
                 processData: false,
                 data: form_data,
                 type: 'post',
-                success: function(php_script_response){
+                success: function(data){
+                  console.log("PHP Output:");
+                  console.log( data );
 
-                $('#php_response').html(php_script_response);    // display response from the PHP script, if any
+          //   $('#php_response').html(data);    // display response from the PHP script, if any
               }
      });
-    localhost_con();
+    //localhost_con();
 
 
 });
