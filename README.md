@@ -1,4 +1,4 @@
 # cvapi
 
- I need one of your email ids. Mine is rahultarak12345@gmail.com
+ TensorFlow Image Learning Pipeline and Image recognition with similar image search.
  
