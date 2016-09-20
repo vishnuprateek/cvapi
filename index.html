@@ -1,0 +1,125 @@
+		<html>
+		<head>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+			<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+		</head>
+		<body>
+			<nav>
+				<div class="nav-wrapper">
+					<a href="#!" class="brand-logo">CVAPI</a>
+					<ul class="left hide-on-med-and-down">
+					</ul>
+				</div>
+			</nav>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col s12">
+						<div class="col s6">
+
+							<div class="card grey lighten-1">
+								<span class="card-title">Upload Image</span>
+								<div class="card-content grey lighten-3">
+
+									<form id="form" method="post" action="upload.php" enctype="multipart/form-data">
+										<h3>	Select image to upload:</h3>
+										<label>
+											<div row>
+
+												<div class="file-field input-field">
+													<div class="btn">
+														<span>File</span>
+														<input type="file" name="fileToUpload" value="fileToUpload" id="file">
+													</div>
+													<div class="file-path-wrapper" >
+														<input class="file-path validate"  style="color:black" type="text">
+													</div>
+												</label>
+											</div>
+										</div>;
+										<div row>
+											<button class="btn waves-effect waves-light" type="submit" name="submit" id="upload" value="Upload Image">Submit
+												<i class="material-icons right">send</i>
+											</button>
+										</div>
+										<!--		<input class="btn btn-default btn-file" id="upload" type="submit" value="Upload Image" name="submit"> -->
+									</form>
+								</div>
+							</div>
+
+						</div>
+						<div class="col s6">
+							<div class="card blue-grey darken-1">
+								<div class="card-content white-text">
+									<span class="card-title">Response</span>
+									<div class="row" >  
+										<p id="loading"></p>
+									</div>
+									<div class="row">
+										<p id="message"></p> 
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<iframe id="search_results" src="" width="100%" height="55%" style="border-color:white;"></iframe>
+				</div>
+			</body>
+			<script>
+				$(document).ready(function (e) {
+					function pipelinecall(){
+						var fd= new FormData();
+						fd.append( 'file',  $( '#file' )[0].files[0]);
+						$.ajax({
+							url: "http://127.0.0.1:5000/",
+							type: "POST",
+							data: fd,
+							contentType: 'false',
+							cache: false,
+							processData:false,
+							beforeSend : function()
+							{
+								$("#err").fadeOut();
+							},
+							success:function(data){
+								var a=data
+								var b=a.split('\n')
+								var c=b[0].split(',')
+								var d=c[0].split(' ')
+								console.log(d[0])
+								var url="https://www.google.com/search?site=&tbm=isch&source=hp&biw=1855&bih=966&q=entertainment&oq=entertainment&gs_l=img.3..0l10.1928215.1933560.0.1933675.24.14.4.6.6.0.141.1025.7j4.11.0....0...1ac.1.64.img..3.21.1050.qL0seFg-Nyo#tbm=isch&q=chocolate"
+								var url=url.replace("chocolate",d)
+								document.getElementById('search_results').src=url
+								$("#message").html(data);
+							}
+						})
+					}
+					$("#form").on('submit',(function(e) {
+						e.preventDefault();
+						$("#message").empty();
+						$('#loading').show();
+						var fd= new FormData(this);
+						fd.append( 'file',  $( '#file' )[0].files[0]);
+						$.ajax({
+						url: "upload.php", // Url to which the request is send
+						type: "POST",             // Type of request to be send, called as method
+						data: fd, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+						contentType: false,       // The content type used when sending data to the server.
+						cache: false,             // To unable request pages to be cached
+						processData:false,        // To send DOMDocument or non processed data file it is set to false
+						success: function(data)   // A function to be called if request succeeds
+						{
+							$('#loading').hide();
+							$("#message").html(data);
+							pipelinecall();
+						}
+					});
+					}));
+
+				})
+			</script>
+			</html>
